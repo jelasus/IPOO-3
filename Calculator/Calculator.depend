@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1474929801 source:d:\calculator\main.c
+	<stdio.h>
+	<stdlib.h>
+	"cal.h"
+
+1474864491 d:\calculator\cal.h
+
+1474925930 source:d:\calculator\getch.c
+	<stdio.h>
+
+1474929681 source:d:\calculator\pile.c
+	<stdio.h>
+	<ctype.h>
+	"cal.h"
+
+1474864663 source:d:\calculator\stack.c
+	<stdio.h>
+	"cal.h"
+
