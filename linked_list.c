@@ -5,39 +5,56 @@ struct node
 {
     int val;
     struct node *next;
-}*head,*prev,*cur;
+};
 
-void create_linked_list(int);
-void print_linked_list(int);
-void delete_this(int);
-void insert_beginning(int);
-void insert_middle(int,int);
-void sorted_list(int);
-void aumentar(void);
-
-int n;
+void create_linked_list(struct node**);
+void print_linked_list(struct node*);
+void delete_this(int,struct node**);
+void insert_beginning(int,struct node**);
+void insert_middle(int,struct node*);
+void sorted_list(struct node*);
+void concatenate(struct node*, struct node*);
+int large(struct node*);
 
 main()
 {
-    printf("Escriba el largo que tendra la lista: ");
-    scanf("%d\n", &n);
-    create_linked_list(n);
-    delete_this(1);
-    insert_beginning(1);
-    insert_middle(n,30);
-    printf("---%d---\n", n);
-    sorted_list(n);
-    print_linked_list(n);
+    struct node* head1,* head2;
+    create_linked_list(&head1);
+    create_linked_list(&head2);
+    delete_this(1,&head1);
+    insert_beginning(1,&head1);
+    insert_middle(30,head1);
+    sorted_list(head1);
+    print_linked_list(head1);
+    print_linked_list(head2);
+    concatenate(head1,head2);
+    print_linked_list(head1);
     return 0;
 }
 
-void create_linked_list(int n)
+int large(struct node *head)
 {
-    int i;
+    int i=0;
+    struct node *t=head;
+    while (t!=NULL)
+    {
+        ++i;
+        t=t->next;
+    }
+    return i;
+}
+
+void create_linked_list(struct node** head0)
+{
+    struct node *head,*prev, *cur;
+    int i,a;
+    printf("Escriba el largo que tendra la lista: ");
+    scanf("%d", &a);
     head = malloc(sizeof(struct node));
     head->val=1;
+    *head0=head;
     prev=head;
-    for (i=2;i<=n;i++)
+    for (i=2;i<=a;i++)
     {
         cur = malloc(sizeof(struct node));
         cur->val=i;
@@ -47,7 +64,7 @@ void create_linked_list(int n)
     prev->next=NULL;
 }
 
-void print_linked_list(int n)
+void print_linked_list(struct node* head)
 {
     struct node *t;
     t=head;
@@ -58,16 +75,18 @@ void print_linked_list(int n)
     }
 }
 
-
-void delete_this(int key)
+void delete_this(int key, struct node** head0)
 {
+    struct node *head,*prev, *cur;
     struct node *temp;
+    head=*head0;
     if(head->val==key)
     {
-        --n;
         temp=head;
         head=head->next;
         free(temp);
+        *head0=head;
+        return;
     }
     prev=head;
     cur=head->next;
@@ -75,7 +94,6 @@ void delete_this(int key)
     {
         if (cur->val==key)
         {
-            --n;
             prev->next=cur->next;
             free(cur);
             break;
@@ -85,48 +103,45 @@ void delete_this(int key)
     }
 }
 
-void insert_beginning(int h)
+void insert_beginning(int h, struct node** head0)
 {
+    struct node *head,*prev, *cur;
     struct node* temp1;
+    head=*head0;
     temp1=malloc(sizeof(struct node));
     temp1->next=head;
     temp1->val=h;
-    head=temp1;
-    ++n;
+    *head0=temp1;
 }
 
-void insert_middle(int n,int h)
+void insert_middle(int h, struct node* head)
 {
-    int i;
+    struct node *prev, *cur;
+    int i=0, c=large(head);
     struct node *temp1, *temp2;
     prev=head;
     cur=head->next;
-    while(i<n/2)
+    while(i<c/2)
     {
         prev=cur;
         cur=cur->next;
-        i++;
+        ++i;
     }
     temp2=malloc(sizeof(struct node));
     temp2->next=cur;
     prev->next=temp2;
     temp2->val=h;
-    aumentar();
 }
 
-void aumentar(void)
+void sorted_list(struct node* head)
 {
-    ++n;
-}
-
-void sorted_list(int n)
-{
-    int i,j,temp;
+    struct node *prev, *cur;
+    int i,j,temp, c=large(head);
     prev=head;
     cur=head->next;
-    for (j=0;j<n-1;j++)
+    for (j=0;j<c-1;j++)
     {
-        for (i=0;i<n-j-1;i++)
+        for (i=0;i<c-j-1;i++)
         {
             if (prev->val > cur->val)
             {
@@ -138,21 +153,15 @@ void sorted_list(int n)
             cur=cur->next;
         }
         prev=head;
+        cur=head->next;
     }
 }
 
-void concatenate(int a, int b)
+void concatenate(struct node *head1, struct node *head2)
 {
-    while (temp2!=NULL)
-        temp1=temp2;
-        temp2=temp2->next;
-    temp2->next=temp3;
-    temp4=temp3
-    while (temp4!=NULL)
-        temp1=temp4;
-        temp1=temp2;
-        temp2=temp2->next;
-        temp4=temp5;
-        temp5=temp5->next;
-
+     struct node* temp;
+     temp=head1;
+     while(temp->next!=NULL)
+        temp=temp->next;
+     temp->next=head2;
 }
